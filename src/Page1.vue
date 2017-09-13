@@ -1,44 +1,34 @@
 <template>
-<v-ons-page>
-<div id=app>
-<gmap-map
-    :center="center"
-    :zoom="7"
-    style="width: 500px; height: 300px"
-  >
-    <gmap-marker
-      :key="index"
-      v-for="(m, index) in markers"
-      :position="m.position"
-      :clickable="true"
-      :draggable="true"
-      @click="center=m.position"
-    ></gmap-marker>
-  </gmap-map>
-</div>
-</v-ons-page>
+<v-ons-navigator>
+  <div class="google-map" :id="mapName"></div>
+</v-ons-navigator>
 </template>
 
 <script>
-  import * as VueGoogleMaps from 'vue2-google-maps';
-  import Vue from 'vue';
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyDX3SEHwFUY-k_Jp7YMp0-uTvo7up-paXM'
-  }
-});
-
 export default {
-  data () {
+  name: 'google-map',
+  props: ['name'],
+  data: function () {
     return {
-    center: {lat: 10.0, lng: 10.0},
-        markers: [{
-          position: {lat: 10.0, lng: 10.0}
-        }, {
-          position: {lat: 11.0, lng: 11.0}
-        }]
-}
-}
-}
-</script>
+      mapName: this.name + "-map",
+    }
+  },
+  mounted: function () {
+    const element = document.getElementById(this.mapName)
+    const options = {
+      zoom: 14,
+      center: new google.maps.LatLng(51.501527,-0.1921837)
+    }
 
+    const map = new google.maps.Map(element, options);
+  }
+};
+</script>
+<style scoped>
+.google-map {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  background: gray;
+}
+</style>
